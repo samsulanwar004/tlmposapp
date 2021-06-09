@@ -4,6 +4,7 @@ import {Context} from '../context/Store';
 import { Button, ThemeProvider, Input, Text, Avatar, ListItem } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 Ionicons.loadFont();
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import _ from 'lodash';
 
 //api
@@ -16,6 +17,7 @@ const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('screen');
 
 function HistoryScreen({ navigation }) {
 
+	const insets = useSafeAreaInsets();
 	const [state, dispatch] = useContext(Context);
 	const [loading, setLoading] = useState(false);
 	const [dataHistory, setDataHistory] = useState(Array());
@@ -43,15 +45,8 @@ function HistoryScreen({ navigation }) {
 	}
 
 	useEffect(() => {
-	    const unsubscribe = navigation.addListener('focus', () => {
-	      // The screen is focused
-	      // Call any action
-	      getHistory();
-	    });
-
-	    // Return the function to unsubscribe from the event so it gets removed on unmount
-	    return unsubscribe;
-	}, [navigation]);
+	    getHistory();
+	}, []);
 
 	keyExtractor = (item, index) => index.toString();
 
@@ -79,7 +74,7 @@ function HistoryScreen({ navigation }) {
                     refreshing={false}
                     onRefresh={() => getHistory()} />
                 }
-				style={styles.containerHistory}
+				style={[styles.containerHistory, {marginBottom: insets.bottom}]}
 		      	keyExtractor={keyExtractor}
 		      	data={dataHistory}
 		      	renderItem={renderItem}
