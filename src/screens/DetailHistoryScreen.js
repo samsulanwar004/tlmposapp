@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useLayoutEffect } from "react";
-import { View, Dimensions, Alert, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Dimensions, Alert, ActivityIndicator, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import {Context} from '../context/Store';
 import { Button, ThemeProvider, Input, Text, Avatar } from 'react-native-elements';
 import HTML from "react-native-render-html";
@@ -72,6 +72,7 @@ function DetailHistoryScreen({ navigation, route }) {
 
 	return (
 		<ThemeProvider>
+			<StatusBar barStyle="dark-content" animated={true} showHideTransition="slide"/>
 			<ScrollView style={{flex: 1,backgroundColor: '#FFFFFF'}}>
 				<ListItem bottomDivider>
 				    <ListItem.Content>

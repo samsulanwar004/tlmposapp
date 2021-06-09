@@ -123,7 +123,7 @@ function HomeScreen({ navigation, route }) {
 				</View>
 			</View>
 			<View style={{flex: 3, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f9fafe'}}>
-				<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: SCREEN_WIDTH-40, marginTop: (SCREEN_WIDTH-40)/4+50+insets.top }}>
+				<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: SCREEN_WIDTH-40, marginTop: (SCREEN_WIDTH-40)/6+(insets.top/3) }}>
 					<Text h4 style={{fontWeight: 'bold'}}>History</Text>
 					<Text onPress={() => navigation.navigate('History')} style={{fontWeight: 'bold', color: '#7d8032'}}>View All</Text>
 				</View>
@@ -133,7 +133,7 @@ function HomeScreen({ navigation, route }) {
 	                    refreshing={false}
 	                    onRefresh={() => getHistory()} />
 	                }
-					style={styles.containerHistory}
+					style={[styles.containerHistory, {marginBottom: 50 + insets.bottom}]}
 			      	keyExtractor={keyExtractor}
 			      	data={dataHistory}
 			      	renderItem={renderItem}
@@ -205,7 +205,6 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 10, 
 		borderTopRightRadius: 10, 
 		marginTop: 10,
-		marginBottom: 80,
 		shadowColor: '#000',
 		shadowOffset: {
 			width: 0,

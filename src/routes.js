@@ -126,7 +126,7 @@ function Route({ navigation }) {
           <Stack.Screen name="Barcode" component={BarcodeScreen} options={{}}/>
           <Stack.Screen name="History" component={HistoryScreen} options={{}}/>
           <Stack.Screen name="Personal Information" component={PersonalScreen} options={{}}/>
-          <Stack.Screen name="Pos" component={PosScreen} options={{}}/>
+          <Stack.Screen name="Pos" component={PosScreen} options={{title: 'Point Of Sale'}}/>
           <Stack.Screen name="Detail History" component={DetailHistoryScreen} options={{}}/>
         </>
       )}

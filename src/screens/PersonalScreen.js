@@ -25,7 +25,7 @@ function PersonalScreen({ navigation }) {
 
 	return (
 		<ThemeProvider>
-			<StatusBar barStyle="light-content" animated={true} showHideTransition="slide" backgroundColor="#7d8032"/>
+			<StatusBar barStyle="dark-content" animated={true} showHideTransition="slide"/>
 			<View style={{flex: 3, flexDirection: 'column', alignItems: 'center', backgroundColor: '#FFFFFF'}}>
 				<View style={{width: SCREEN_WIDTH}}>
 					<ListItem

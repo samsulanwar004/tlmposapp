@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useLayoutEffect } from "react";
-import { View, FlatList, StyleSheet, Dimensions, TouchableOpacity, Alert, RefreshControl } from 'react-native';
+import { View, FlatList, StyleSheet, Dimensions, TouchableOpacity, Alert, RefreshControl, StatusBar } from 'react-native';
 import {Context} from '../context/Store';
 import { Button, ThemeProvider, Input, Text, Avatar, ListItem } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -72,6 +72,7 @@ function HistoryScreen({ navigation }) {
 
 	return (
 		<ThemeProvider>
+			<StatusBar barStyle="dark-content" animated={true} showHideTransition="slide"/>
 			<FlatList
 				refreshControl={<RefreshControl
                     color="#7d8032"
