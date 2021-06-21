@@ -76,6 +76,8 @@ function PosScreen({ navigation, route }) {
 		price: '',
 	}]);
 	const [error, setError] = useState({orders: []});
+	const [modalImageZoom, setModalImageZoom] = useState(false);
+	const [imageZoom, setImageZoom] = useState('');
 
 	useEffect(() => {
 		imageCollection();
@@ -182,6 +184,12 @@ function PosScreen({ navigation, route }) {
 		setOrders(oldItem);
 	}
 
+	function zoomImage(key) {
+		setImageZoom(orders[key].image)
+
+		setModalImageZoom(true)
+	}
+
 	const errorStye = (value, replace) => {
 		return value.replace(replace,''); 
 	}
@@ -193,143 +201,174 @@ function PosScreen({ navigation, route }) {
 				behavior="padding"
       			style={{flex: 1}}
       		>
-			<ScrollView style={{backgroundColor: '#f9fafe', marginBottom: 70}}>
-				<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-					{orders.map((data, key) => {
-						return (
-							<Fragment key={key}>
-								<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 5, justifyContent: 'space-between', alignItems: 'center'}}>
-									<Text style={{fontWeight: 'bold'}}>Item {key+1}</Text>
-									<TouchableOpacity disabled={orders.length <= 1 ? true : false} onPress={() => removeItem(key)}>
-										<Ionicons name="ios-trash-outline" size={20} color="#EB5757" />
-									</TouchableOpacity>
-								</View>
-								<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 5, justifyContent: 'space-between'}}>
-									<Text style={{width: (SCREEN_WIDTH-40)/2}}>Product Name</Text>
-								</View>
-								<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, alignItems: 'center', justifyContent: 'space-between', paddingBottom: typeof error['orders.'+key+'.product_name'] != 'undefined' ? 15 : 0}}>
-									<Input
-										inputContainerStyle={{width: SCREEN_WIDTH - 45}}
-										inputStyle={{height: 48}}
-				          	placeholder=' Fill Product Name'
-				          	value={data.product_name}
-				          	onChangeText={(text) => setName(text, key)}
-				          	autoCapitalize="none"
-				          	autoCorrect={false}
-				          	errorMessage={typeof error['orders.'+key+'.product_name'] != 'undefined' ? errorStye(error['orders.'+key+'.product_name'][0], 'orders.'+key+'.') : ''}
-				        	/>
-								</View>
-								<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 5, justifyContent: 'space-between'}}>
-									<Text style={{width: (SCREEN_WIDTH-40)/2}}>QTY</Text>
-								</View>
-								<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, alignItems: 'center', justifyContent: 'space-between', paddingBottom: typeof error['orders.'+key+'.qty'] != 'undefined' ? 15 : 0}}>
-									<Input
-										inputContainerStyle={{width: SCREEN_WIDTH/3}}
-										inputStyle={{height: 48}}
-				          	placeholder=' Fill qty here'
-				          	value={data.qty}
-				          	onChangeText={(text) => setQty(text, key)}
-				          	autoCapitalize="none"
-				          	autoCorrect={false}
-				          	keyboardType="numeric"
-				          	errorMessage={typeof error['orders.'+key+'.qty'] != 'undefined' ? errorStye(error['orders.'+key+'.qty'][0], 'orders.'+key+'.') : ''}
-				        	/>
-				        	{data.image == '' && 
-				        		<TouchableOpacity 
-											onPress={() => navigation.navigate('Camera', {mode: 'back', callback: 'Pos', key: key})}
-											style={{
-												flexDirection: 'column',
-												justifyContent: 'center',
-												alignItems: 'center',
-												borderWidth: 1, 
-												borderRadius: 5, 
-												borderColor: 'grey',
-												borderStyle: 'dashed', 
-												backgroundColor: '#E5E5E5', 
-												width: 48, 
-												height: 48,
-												position: 'absolute',
-												left: SCREEN_WIDTH/3 + 20
-											}}
-										>
-											<Ionicons name="ios-camera" size={SCREEN_WIDTH/12} color="grey" />
+				<ScrollView style={{backgroundColor: '#f9fafe', marginBottom: 70}}>
+					<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+						{orders.map((data, key) => {
+							return (
+								<Fragment key={key}>
+									<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 5, justifyContent: 'space-between', alignItems: 'center'}}>
+										<Text style={{fontWeight: 'bold'}}>Item {key+1}</Text>
+										<TouchableOpacity disabled={orders.length <= 1 ? true : false} onPress={() => removeItem(key)}>
+											<Ionicons name="ios-trash-outline" size={20} color="#EB5757" />
 										</TouchableOpacity>
-				        	}
-				        	{data.image != '' &&
-										<View style={{
-											top: 1,
-											position: 'absolute',
-											left: SCREEN_WIDTH/3 + 20
-										}}>
-											<Image
-												source={{uri: 'data:image/jpg;base64,'+data.image}} 
-												resizeMode="cover" 
+									</View>
+									<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 5, justifyContent: 'space-between'}}>
+										<Text style={{width: (SCREEN_WIDTH-40)/2}}>Product Name</Text>
+									</View>
+									<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, alignItems: 'center', justifyContent: 'space-between', paddingBottom: typeof error['orders.'+key+'.product_name'] != 'undefined' ? 15 : 0}}>
+										<Input
+											inputContainerStyle={{width: SCREEN_WIDTH - 45}}
+											inputStyle={{height: 48}}
+					          	placeholder=' Fill Product Name'
+					          	value={data.product_name}
+					          	onChangeText={(text) => setName(text, key)}
+					          	autoCapitalize="none"
+					          	autoCorrect={false}
+					          	errorMessage={typeof error['orders.'+key+'.product_name'] != 'undefined' ? errorStye(error['orders.'+key+'.product_name'][0], 'orders.'+key+'.') : ''}
+					        	/>
+									</View>
+									<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 5, justifyContent: 'space-between'}}>
+										<Text style={{width: (SCREEN_WIDTH-40)/2}}>QTY</Text>
+									</View>
+									<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, alignItems: 'center', justifyContent: 'space-between', paddingBottom: typeof error['orders.'+key+'.qty'] != 'undefined' ? 15 : 0}}>
+										<Input
+											inputContainerStyle={{width: SCREEN_WIDTH/3}}
+											inputStyle={{height: 48}}
+					          	placeholder=' Fill qty here'
+					          	value={data.qty}
+					          	onChangeText={(text) => setQty(text, key)}
+					          	autoCapitalize="none"
+					          	autoCorrect={false}
+					          	keyboardType="numeric"
+					          	errorMessage={typeof error['orders.'+key+'.qty'] != 'undefined' ? errorStye(error['orders.'+key+'.qty'][0], 'orders.'+key+'.') : ''}
+					        	/>
+					        	{data.image == '' && 
+					        		<TouchableOpacity 
+												onPress={() => navigation.navigate('Camera', {mode: 'back', callback: 'Pos', key: key})}
 												style={{
+													flexDirection: 'column',
+													justifyContent: 'center',
+													alignItems: 'center',
+													borderWidth: 1, 
+													borderRadius: 5, 
+													borderColor: 'grey',
+													borderStyle: 'dashed', 
+													backgroundColor: '#E5E5E5', 
 													width: 48, 
-													height: 48, 
-													borderRadius: 5,
-													marginRight: 10,
-													marginBottom: 10
-												}} 
-											/>
-											<TouchableOpacity 
-												onPress={() => removeImage(key)}
-												style={{
-													position: 'absolute', 
-													top: 3, 
-													right: 13, 
-													backgroundColor: '#FFFFFF', 
-													borderRadius: 10
-												}}>
-												<Ionicons name="ios-close" size={SCREEN_WIDTH/25} color="#EB5757" />
+													height: 48,
+													position: 'absolute',
+													left: SCREEN_WIDTH/3 + 20,
+													bottom: typeof error['orders.'+key+'.qty'] != 'undefined' ? 15 : 0,
+												}}
+											>
+												<Ionicons name="ios-camera" size={SCREEN_WIDTH/12} color="grey" />
 											</TouchableOpacity>
-										</View>
-									}
-								</View>
-								<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 5, justifyContent: 'space-between'}}>
-									<Text style={{width: (SCREEN_WIDTH-40)/2}}>Price</Text>
-								</View>
-								<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, alignItems: 'center', justifyContent: 'space-between', paddingBottom: typeof error['orders.'+key+'.price'] != 'undefined' ? 15 : 0}}>
-									<Input
-										inputContainerStyle={{width: SCREEN_WIDTH - 45}}
-										inputStyle={{height: 48}}
-							          	placeholder=' Fill price here'
-							          	value={data.price}
-							          	onChangeText={(text) => setPrice(text, key)}
-							          	autoCapitalize="none"
-							          	autoCorrect={false}
-							          	keyboardType="numeric"
-							          	errorMessage={typeof error['orders.'+key+'.price'] != 'undefined' ? errorStye(error['orders.'+key+'.price'][0], 'orders.'+key+'.') : ''}
-							        />
-								</View>
-							</Fragment>
-						)
-					})}
-					<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 10}}>
-						<Button 
-							title="Add New Item" 
-							raised={false} 
-							buttonStyle={{backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#7d8032'}} 
-							titleStyle={{color: '#7d8032', fontWeight: 'normal'}}
-							onPress={() => addItem()} 
-						/>
+					        	}
+					        	{data.image != '' &&
+											<TouchableOpacity 
+												onPress={() => zoomImage(key)}
+												style={{
+													top: 1,
+													bottom: typeof error['orders.'+key+'.qty'] != 'undefined' ? 15 : 0,
+													position: 'absolute',
+													left: SCREEN_WIDTH/3 + 20
+												}}
+											>
+												<Image
+													source={{uri: 'data:image/jpg;base64,'+data.image}} 
+													resizeMode="cover" 
+													style={{
+														width: 48, 
+														height: 48, 
+														borderRadius: 5,
+														marginRight: 10,
+														marginBottom: 10
+													}} 
+												/>
+												<TouchableOpacity 
+													onPress={() => removeImage(key)}
+													style={{
+														position: 'absolute', 
+														top: 3, 
+														right: 13, 
+														backgroundColor: '#FFFFFF', 
+														borderRadius: 10
+													}}>
+													<Ionicons name="ios-close" size={SCREEN_WIDTH/25} color="#EB5757" />
+												</TouchableOpacity>
+											</TouchableOpacity>
+										}
+									</View>
+									<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 5, justifyContent: 'space-between'}}>
+										<Text style={{width: (SCREEN_WIDTH-40)/2}}>Price</Text>
+									</View>
+									<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, alignItems: 'center', justifyContent: 'space-between', paddingBottom: typeof error['orders.'+key+'.price'] != 'undefined' ? 15 : 0}}>
+										<Input
+											inputContainerStyle={{width: SCREEN_WIDTH - 45}}
+											inputStyle={{height: 48}}
+								          	placeholder=' Fill price here'
+								          	value={data.price}
+								          	onChangeText={(text) => setPrice(text, key)}
+								          	autoCapitalize="none"
+								          	autoCorrect={false}
+								          	keyboardType="numeric"
+								          	errorMessage={typeof error['orders.'+key+'.price'] != 'undefined' ? errorStye(error['orders.'+key+'.price'][0], 'orders.'+key+'.') : ''}
+								        />
+									</View>
+								</Fragment>
+							)
+						})}
+						<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 10}}>
+							<Button 
+								title="Add New Item" 
+								raised={false} 
+								buttonStyle={{backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#7d8032'}} 
+								titleStyle={{color: '#7d8032', fontWeight: 'normal'}}
+								onPress={() => addItem()} 
+							/>
+						</View>
 					</View>
+				</ScrollView>
+				<View style={[styles.containerButton, {bottom: insets.bottom}]}>
+					<Button 
+						icon={ loading && <ActivityIndicator
+				            animating={true}
+				            style= {{ opacity : 1}}
+				            size="large" 
+				            color="grey"
+				        />}
+						title="Process" 
+						disabled={loading} 
+						onPress={() => request()} 
+					/>
 				</View>
-			</ScrollView>
-			<View style={[styles.containerButton, {bottom: insets.bottom}]}>
-				<Button 
-					icon={ loading && <ActivityIndicator
-			            animating={true}
-			            style= {{ opacity : 1}}
-			            size="large" 
-			            color="grey"
-			        />}
-					title="Process" 
-					disabled={loading} 
-					onPress={() => request()} 
-				/>
-			</View>
 		    </KeyboardAvoidingView>
+		    <Modal
+	        animationType="slide"
+	        transparent={true}
+	        visible={modalImageZoom}
+		    >
+		    	<View style={styles.centeredViewImageZoom}>
+          	<View style={styles.modalViewImageZoom}>
+          		<View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+          			<Image
+									source={{uri: 'data:image/jpg;base64,'+imageZoom}} 
+									resizeMode="cover" 
+									style={{
+										width: SCREEN_WIDTH - 100, 
+										height: SCREEN_HEIGHT/2, 
+										borderRadius: 5
+									}} 
+								/>
+          		</View>
+          		<TouchableOpacity 
+          			onPress={() => setModalImageZoom(false)}
+          			style={{position: 'absolute', right: 6, top: 6}}>
+								<Ionicons name="ios-close" size={30} color="#EB5757" />
+							</TouchableOpacity>
+          	</View>
+		      </View>
+		    </Modal>
 		</ThemeProvider>
 	);
 }
@@ -346,7 +385,26 @@ const styles = StyleSheet.create({
 		borderColor: 'grey',
 		position: 'absolute',
 		bottom: 0
-	}
+	},
+	centeredViewImageZoom: {
+    flex: 1,
+    justifyContent: 'center'
+	},
+	modalViewImageZoom: {
+		marginHorizontal: 15,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+	},
 });
 
 export default PosScreen;

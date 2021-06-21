@@ -38,7 +38,7 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>access your camera for user's face recognition</string>
+	<string>access your camera for product photo's</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>access the user's location to determine the closest point to the store</string>
 	<key>NSLocationAlwaysUsageDescription</key>

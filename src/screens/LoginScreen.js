@@ -13,6 +13,7 @@ import { Button, ThemeProvider, Input, Text } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 Ionicons.loadFont();
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import OneSignal from 'react-native-onesignal';
 
 //api
 import {login} from '../api/auth';
@@ -64,14 +65,14 @@ function LoginScreen() {
   const [state, dispatch] = useContext(Context);
 
   async function logIn() {
-    const {device} = state.onesignal;
+    const deviceState = await OneSignal.getDeviceState();
 
     setLoading(true);
 
     let data = {
       username: username,
       password: password,
-      player_id: device != null ? device.userId : ''
+      player_id: typeof deviceState.userId != 'undefined' ? deviceState.userId : ''
     }
 
     const {code, result} = await login(data);

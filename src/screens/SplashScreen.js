@@ -27,10 +27,6 @@ function SplashScreen({ navigation }) {
     OneSignal.setNotificationOpenedHandler(notification => {
       console.log("OneSignal: notification opened:", notification);
     });
-
-    const deviceState = await OneSignal.getDeviceState();
-
-    dispatch({ type: 'RESTORE_ONESIGNAL', device: deviceState});
   }
 
   return (

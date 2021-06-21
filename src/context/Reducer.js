@@ -36,14 +36,3 @@ export const Account = (prevState, action) => {
       default: return prevState;
     }
 };
-
-export const Onesignal = (prevState, action) => {
-    switch (action.type) {
-      case 'RESTORE_ONESIGNAL':
-        return {
-          ...prevState,
-          device: action.device
-        };
-      default: return prevState;
-    }
-};

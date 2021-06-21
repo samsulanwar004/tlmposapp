@@ -1,6 +1,6 @@
 import React, {createContext, useReducer} from "react";
 import combineReducers from 'react-combine-reducers';
-import {Auth, Account, Onesignal} from './Reducer';
+import {Auth, Account} from './Reducer';
 
 const initialAuth = {
     isLoading: true,
@@ -12,14 +12,9 @@ const initialProfile = {
     profile: null,
 };
 
-const initialOnesignal = {
-    device: null,
-};
-
 const [globalReducer, initialGlobal] = combineReducers({
     auth: [Auth, initialAuth],
-    account: [Account, initialProfile],
-    onesignal: [Onesignal, initialOnesignal]
+    account: [Account, initialProfile]
 });
 
 const Store = ({children}) => {
