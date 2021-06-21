@@ -51,13 +51,13 @@ const theme = {
   	},
     inputContainerStyle: {
     	paddingLeft: 10,
-      	borderWidth: 1,
-      	borderColor: 'grey',
-      	borderRadius: 5,
-      	backgroundColor: '#FFFFFF'
+    	borderWidth: 1,
+    	borderColor: 'grey',
+    	borderRadius: 5,
+    	backgroundColor: '#FFFFFF'
     },
     inputStyle: {
-      	height: 50
+      height: 50
     }
   }
 };
@@ -71,14 +71,25 @@ function PosScreen({ navigation, route }) {
 	const [loading, setLoading] = useState(false);
 	const [orders, setOrders] = useState([{
 		product_name: '',
+		image: '',
 		qty: '',
 		price: '',
 	}]);
 	const [error, setError] = useState({orders: []});
 
 	useEffect(() => {
-
+		imageCollection();
 	}, [route.params]);
+
+	async function imageCollection() {
+		if (typeof params != 'undefined') {
+			let oldItem = [...orders];
+
+			oldItem[params.key].image = params.image;
+			
+			setOrders(oldItem)
+		}
+	}
 
 	async function request() {
 
@@ -101,6 +112,7 @@ function PosScreen({ navigation, route }) {
 			
 	    	setOrders([{
 				product_name: '',
+				image: '',
 				qty: '',
 				price: '',
 			}]);
@@ -141,11 +153,20 @@ function PosScreen({ navigation, route }) {
 		setOrders(oldItem)
 	}
 
+	function removeImage(key) {
+		let oldItem = [...orders];
+
+		oldItem[key].image = '';
+		
+		setOrders(oldItem)
+	}
+
 	function addItem() {
 		let oldItem = [...orders];
 
 		oldItem = oldItem.concat({
 			product_name: '',
+			image: '',
 			qty: '',
 			price: '',
 		})
@@ -190,13 +211,13 @@ function PosScreen({ navigation, route }) {
 									<Input
 										inputContainerStyle={{width: SCREEN_WIDTH - 45}}
 										inputStyle={{height: 48}}
-							          	placeholder=' Fill Product Name'
-							          	value={data.product_name}
-							          	onChangeText={(text) => setName(text, key)}
-							          	autoCapitalize="none"
-							          	autoCorrect={false}
-							          	errorMessage={typeof error['orders.'+key+'.product_name'] != 'undefined' ? errorStye(error['orders.'+key+'.product_name'][0], 'orders.'+key+'.') : ''}
-							        />
+				          	placeholder=' Fill Product Name'
+				          	value={data.product_name}
+				          	onChangeText={(text) => setName(text, key)}
+				          	autoCapitalize="none"
+				          	autoCorrect={false}
+				          	errorMessage={typeof error['orders.'+key+'.product_name'] != 'undefined' ? errorStye(error['orders.'+key+'.product_name'][0], 'orders.'+key+'.') : ''}
+				        	/>
 								</View>
 								<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 5, justifyContent: 'space-between'}}>
 									<Text style={{width: (SCREEN_WIDTH-40)/2}}>QTY</Text>
@@ -205,14 +226,65 @@ function PosScreen({ navigation, route }) {
 									<Input
 										inputContainerStyle={{width: SCREEN_WIDTH/3}}
 										inputStyle={{height: 48}}
-							          	placeholder=' Fill qty here'
-							          	value={data.qty}
-							          	onChangeText={(text) => setQty(text, key)}
-							          	autoCapitalize="none"
-							          	autoCorrect={false}
-							          	keyboardType="numeric"
-							          	errorMessage={typeof error['orders.'+key+'.qty'] != 'undefined' ? errorStye(error['orders.'+key+'.qty'][0], 'orders.'+key+'.') : ''}
-							        />
+				          	placeholder=' Fill qty here'
+				          	value={data.qty}
+				          	onChangeText={(text) => setQty(text, key)}
+				          	autoCapitalize="none"
+				          	autoCorrect={false}
+				          	keyboardType="numeric"
+				          	errorMessage={typeof error['orders.'+key+'.qty'] != 'undefined' ? errorStye(error['orders.'+key+'.qty'][0], 'orders.'+key+'.') : ''}
+				        	/>
+				        	{data.image == '' && 
+				        		<TouchableOpacity 
+											onPress={() => navigation.navigate('Camera', {mode: 'back', callback: 'Pos', key: key})}
+											style={{
+												flexDirection: 'column',
+												justifyContent: 'center',
+												alignItems: 'center',
+												borderWidth: 1, 
+												borderRadius: 5, 
+												borderColor: 'grey',
+												borderStyle: 'dashed', 
+												backgroundColor: '#E5E5E5', 
+												width: 48, 
+												height: 48,
+												position: 'absolute',
+												left: SCREEN_WIDTH/3 + 20
+											}}
+										>
+											<Ionicons name="ios-camera" size={SCREEN_WIDTH/12} color="grey" />
+										</TouchableOpacity>
+				        	}
+				        	{data.image != '' &&
+										<View style={{
+											top: 1,
+											position: 'absolute',
+											left: SCREEN_WIDTH/3 + 20
+										}}>
+											<Image
+												source={{uri: 'data:image/jpg;base64,'+data.image}} 
+												resizeMode="cover" 
+												style={{
+													width: 48, 
+													height: 48, 
+													borderRadius: 5,
+													marginRight: 10,
+													marginBottom: 10
+												}} 
+											/>
+											<TouchableOpacity 
+												onPress={() => removeImage(key)}
+												style={{
+													position: 'absolute', 
+													top: 3, 
+													right: 13, 
+													backgroundColor: '#FFFFFF', 
+													borderRadius: 10
+												}}>
+												<Ionicons name="ios-close" size={SCREEN_WIDTH/25} color="#EB5757" />
+											</TouchableOpacity>
+										</View>
+									}
 								</View>
 								<View style={{flexDirection: 'row', width: SCREEN_WIDTH-30, marginVertical: 5, justifyContent: 'space-between'}}>
 									<Text style={{width: (SCREEN_WIDTH-40)/2}}>Price</Text>

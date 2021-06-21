@@ -23,6 +23,7 @@ import HistoryScreen from './screens/HistoryScreen';
 import PersonalScreen from './screens/PersonalScreen';
 import PosScreen from './screens/PosScreen';
 import DetailHistoryScreen from './screens/DetailHistoryScreen';
+import CameraScreen from './screens/CameraScreen';
 
 //tab button
 import TabBarcodeButton from './components/TabBarcodeButton';
@@ -123,7 +124,7 @@ function Route({ navigation }) {
       ) : (
         <>
           <Stack.Screen name="Home" component={TabScreen} options={{headerShown: false}}/>
-          <Stack.Screen name="Barcode" component={BarcodeScreen} options={{}}/>
+          <Stack.Screen name="Camera" component={CameraScreen} options={{headerShown: false}}/>
           <Stack.Screen name="History" component={HistoryScreen} options={{}}/>
           <Stack.Screen name="Personal Information" component={PersonalScreen} options={{}}/>
           <Stack.Screen name="Pos" component={PosScreen} options={{title: 'Point Of Sale'}}/>
