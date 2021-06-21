@@ -128,7 +128,7 @@ function LoginScreen() {
             animating={true}
             style= {{ opacity : 1}}
             size="large" 
-            color="#1293ff"
+            color="#7d8032"
           />}
         </View>
         <View style={[styles.containerButton, {bottom: insets.bottom}]}>
