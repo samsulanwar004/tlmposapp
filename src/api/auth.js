@@ -25,3 +25,19 @@ export const login = async(data) => {
     return error;
   });
 }
+
+export const register = async(data) => {
+  console.log(API_URL);
+  return axios({
+    method: 'post',
+    url: API_URL+'/auth/register',
+    data: data
+  }).then(processResponse)
+  .then(function (response) {
+    return response;
+  })
+  .catch(error => processResponse(error.response))
+  .catch(function (error) {
+    return error;
+  });
+}

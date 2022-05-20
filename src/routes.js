@@ -16,6 +16,7 @@ import { IS_IPHONE_X } from './utils';
 //screens
 import SplashScreen from './screens/SplashScreen';
 import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import BarcodeScreen from './screens/BarcodeScreen';
@@ -120,7 +121,10 @@ function Route({ navigation }) {
   return (
     <Stack.Navigator initialRouteName="Login">
       {state.auth.accessToken == null ? (
-        <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
+        <>
+          <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
+          <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false}}/>
+        </>
       ) : (
         <>
           <Stack.Screen name="Home" component={TabScreen} options={{headerShown: false}}/>

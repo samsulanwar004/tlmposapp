@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import OneSignal from 'react-native-onesignal';
 
 //api
-import {login} from '../api/auth';
+import {register} from '../api/auth';
 
 //storage
 import { storageSet, storageGet } from '../storage';
@@ -54,18 +54,19 @@ const theme = {
   }
 };
 
-function LoginScreen({navigation}) {
+function RegisterScreen({navigation}) {
 
   const insets = useSafeAreaInsets();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [passwordHide, setPasswordHide] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({username: [], password: []});
 
   const [state, dispatch] = useContext(Context);
 
-  async function logIn() {
+  async function handleRegister() {
     const deviceState = await OneSignal.getDeviceState();
 
     setLoading(true);
@@ -73,15 +74,19 @@ function LoginScreen({navigation}) {
     let data = {
       username: username,
       password: password,
+      name: name,
       player_id: typeof deviceState.userId != 'undefined' ? deviceState.userId : ''
     }
 
-    const {code, result} = await login(data);
+    const {code, result} = await register(data);
 
     if (code === 200) {
-      await storageSet('access_token', result.data.access_token);
-      dispatch({ type: 'LOG_IN', token: result.data.access_token });
       setLoading(false);
+      Alert.alert(
+        'Success',
+        result.data
+      );
+      navigation.navigate('Login')
     } else if (code === 422) {
       setError(result.errors)
       setLoading(false);
@@ -89,9 +94,9 @@ function LoginScreen({navigation}) {
       console.log(result);
       setLoading(false);
       Alert.alert(
-			  'Error',
-			  JSON.stringify(result)
-			);
+        'Error',
+        JSON.stringify(result)
+      );
     }
   }
     
@@ -104,6 +109,15 @@ function LoginScreen({navigation}) {
         </View>
       </View>
       <View style={{flex: 2, flexDirection: 'column', backgroundColor: 'white', paddingTop: 40}}>
+        <Input
+          label="Nama"
+          placeholder=' Nama'
+          value={name}
+          onChangeText={setName}
+          autoCapitalize="none"
+          autoCorrect={false}
+          errorMessage={typeof error.name != 'undefined' ? error.name[0] : ''}
+        />
         <Input
           label="Username"
           placeholder=' Username'
@@ -128,8 +142,8 @@ function LoginScreen({navigation}) {
           autoCorrect={false}
           errorMessage={typeof error.password != 'undefined' ? error.password[0] : ''}
         />
-        <TouchableOpacity onPress={() => navigation.navigate('Register')} style={{marginHorizontal: 20, flexDirection: 'row', justifyContent: 'flex-end'}}>
-          <Text style={{color: 'grey'}}>Register</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{marginHorizontal: 20, flexDirection: 'row', justifyContent: 'flex-end'}}>
+          <Text style={{color: 'grey'}}>Login</Text>
         </TouchableOpacity>
         <View style={{height: 30}}>
           {loading && <ActivityIndicator
@@ -140,7 +154,7 @@ function LoginScreen({navigation}) {
           />}
         </View>
         <View style={[styles.containerButton, {bottom: insets.bottom}]}>
-          <Button title="LOGIN" onPress={() => logIn()} />
+          <Button title="REGISTER" onPress={() => handleRegister()} />
         </View>
       </View>
     </ThemeProvider>
@@ -159,4 +173,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginScreen;
+export default RegisterScreen;
